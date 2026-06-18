@@ -33,3 +33,10 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true # Tells Argo CD to build the 'gatekeeper-system' namespace first
+
+  # havent get it
+  ignoreDifferences:
+    - group: apiextensions.k8s.io
+      kind: CustomResourceDefinition
+      jsonPointers:
+        - /spec/preserveUnknownFields
