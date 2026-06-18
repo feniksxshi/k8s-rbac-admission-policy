@@ -25,3 +25,4 @@ kubectl -n argocd annotate application root \
 
 kubectl -n argocd get application root -w
 ```
+![alt text](image-5.png)

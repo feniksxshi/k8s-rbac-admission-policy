@@ -6,7 +6,7 @@ spec:
   enforcementAction: warn
   match:
     kinds:
-    - apiGroups: [""]
+    - apiGroups: ["apps"]
       kinds: ["Deployment"]
   parameters:
     limits:
