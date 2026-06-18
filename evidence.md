@@ -22,8 +22,7 @@ Reviewing the current `rollout.yaml`
 	Also modify this part in 4 constraints files:
 	![alt text](image-10.png)
 
-Test: \
-Use Kubernetes server-side dry-run. It triggers Gatekeeper admission without creating a real Pod. 
+Test: Use Kubernetes server-side dry-run. It triggers Gatekeeper admission without creating a real Pod. 
 1. Reject `:latest`
 	```bash
 	kubectl set image -f /tmp/test-pod.yaml \
@@ -85,6 +84,23 @@ Use Kubernetes server-side dry-run. It triggers Gatekeeper admission without cre
 ## Custom ConstraintTemplate
 Docs: https://open-policy-agent.github.io/gatekeeper/website/docs/howto/
 
+Code: 
+- gatekeeper/constraints/enforce-naming-convention.yaml
+- gatekeeper/templates/template-naming-convention.yaml
+
+Test the Deployment policy:
+```bash
+kubectl -n demo create deployment gatekeeper-test \
+  --image=busybox:1.36.1 --dry-run=server -o yaml
+```
+![alt text](image-17.png)
+
+# ESO + Trivy + Cosign
+> ESO: External Secrets Operator
+
+Create AWS Crendentials in Minikube
+![alt text](image-19.png)
+![alt text](image-20.png)
 
 --- 
 Latest commit on origin/main
