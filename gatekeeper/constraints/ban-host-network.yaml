@@ -1,5 +1,5 @@
-apiVersion: constraints.gatekeeper.sh/v1beta1 
-kind: ConstraintTemplate
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: K8sPSPHostNetworkingPorts
 metadata:
   name: k8spsphostnetworkingports
 spec:
