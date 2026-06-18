@@ -1,4 +1,4 @@
-apiVersion: contraints.gatekeeper.sh/v1beta1
+apiVersion: constraints.gatekeeper.sh/v1beta1
 kind: K8sDisallowedTags
 metadata:
   name: k8sdisallowedtags
