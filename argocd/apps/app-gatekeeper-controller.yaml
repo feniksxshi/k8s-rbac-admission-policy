@@ -14,7 +14,14 @@ spec:
   source:
     # Tells Argo CD where to go on the internet 
     # to fetch the installation files for the core OPA Gatekeeper application
-    repoURL: https://github.com/feniksxshi/k8s-rbac-admission-policy
+
+    # Think of a Helm repository like an app store for Kubernetes applications:
+    # index.yaml = the app-store catalog
+    # Helm chart = an application
+    # .tgz file = packaged installer
+    # Chart version = application version
+    # Helm/Argo CD = the installer
+    repoURL: https://open-policy-agent.github.io/gatekeeper/charts
     chart: gatekeeper
     targetRevision: 3.14.0
   destination: 
