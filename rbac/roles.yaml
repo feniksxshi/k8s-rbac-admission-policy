@@ -1,0 +1,36 @@
+apiVersion: rbac.authorization.k8s.io/v1 
+kind: Role
+metadata:
+  namespace: demo
+  name: pod-crud
+rules:
+- apiGroups: [""] # core groups for groups / services
+  resource: ["pod", "service"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"] # crud workload
+  
+- apiGroups: [""] # app groups for deployments
+  resource: ["deployemnt"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"] 
+
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole 
+metadata:
+  name: cluster-pod-crud
+rules:
+- apiGroups: [""]
+  resource: ["pod"]
+  verbs: [
+    "get", "list", "watch", # view
+    "update", "patch"       # modify
+    # patch means: making small edits to a resource without replacing the whole thing
+  ]
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata: 
+  name: cluster-pod-reader 
+rules:
+- apiGroups: [""]
+  resource: ["pod"]
+  verbs: ["get", "list", "watch"]
