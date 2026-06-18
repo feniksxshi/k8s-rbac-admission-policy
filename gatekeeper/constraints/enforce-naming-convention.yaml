@@ -2,17 +2,21 @@
 apiVersion: constraints.gatekeeper.sh/v1beta1
 kind: K8sRequiredPrefixes
 metadata:
-  enforcementAction: deny
   name: enforce-deployment-prefixes
   # what
   annotations:
     argocd.argoproj.io/sync-wave: "2" # Make sure this runs in your constraints wave
 
 spec:
+  enforcementAction: deny
   match:
+    # kinds:
+    #   - apiGroups: ["apps"]
+    #     kinds: ["Deployment"]
+    namespaces: ["demo"]
     kinds:
       - apiGroups: ["apps"]
-        kinds: ["Deployment"]
+        kinds: ["Deployment"] 
   parameters:
     prefixes:
       - "api-"
