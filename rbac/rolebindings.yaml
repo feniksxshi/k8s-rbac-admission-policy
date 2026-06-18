@@ -1,23 +1,27 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  namespace: demo
   name: crud-pods
+  namespace: demo
 subjects:
 - kind: User
   name: alice
+  apiGroup: rbac.authorization.k8s.io
 roleRef:
+  apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: pod-crud 
+  name: pod-crud
 
-apiVerison: rbac.authorization.k8s.io/v1
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: sre-crud-pods
 subjects:
 - kind: User
   name: bob
+  apiGroup: rbac.authorization.k8s.io
 roleRef:
+  apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
   name: cluster-pod-crud
 
@@ -28,6 +32,8 @@ metadata:
 subjects:
 - kind: User
   name: carol
-roleRef: 
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
   name: cluster-pod-reader
