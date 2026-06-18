@@ -23,6 +23,9 @@ spec:
       - name: api
         image: ghcr.io/feniksxshi/w10-api:v0.0.1-0b93af4
         imagePullPolicy: IfNotPresent
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1000 # UID 0 is Linux root; UID 1000 is an ordinary non-root user
         ports:
         - containerPort: 8080
           protocol: TCP

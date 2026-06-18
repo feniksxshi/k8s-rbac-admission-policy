@@ -4,7 +4,17 @@ Test:
 ![alt text](image-2.png)
 ---
 ![alt text](image-4.png)
+![alt text](image-6.png)
 
+Reviewing the current `rollout.yaml`
+- No `hostNetwork` -> Not configured, defaults to `false`
+- No `latest` image -> Uses `v0.0.1-0b93af4`
+	![alt text](image-7.png)
+- CPU/memory limits -> Both are configured 
+	![alt text](image-8.png)
+- Must run non-root  -> No securityContext; image defaults to root ❌ \
+	Fix: 
+	![alt text](image-9.png)
 --- 
 Latest commit on origin/main
 ```bash

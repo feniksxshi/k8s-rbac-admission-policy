@@ -5,9 +5,9 @@ metadata:
 spec:
   enforcementAction: warn
   match:
-    kinds: 
-    - apiGroups: [""]
-      kinds: ["Deployment"]
+    kinds:
+    - apiGroups: ["argoproj.io"]
+      kinds: ["Rollout"]
   parameters:
     runAsUser:
       rule: "MustRunAsNonRoot"

@@ -6,8 +6,8 @@ spec:
   enforcementAction: warn
   match:
     kinds:
-    - apiGroups: ["apps"]
-      kinds: ["Deployment"]
+    - apiGroups: ["argoproj.io"]
+      kinds: ["Rollout"]
   parameters:
     tags:
       - "latest"
