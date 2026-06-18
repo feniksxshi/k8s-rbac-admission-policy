@@ -1,0 +1,28 @@
+# sync-wave ealry 
+# Controller -> ConstraintTemplate -> Constraint
+# Controller: to download and install the core Gatekeeper engine into your Kubernetes cluster
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: gatekeeper-controller
+  namespace: argocd
+  annotatioins:
+    argocd.argoproj.io/sync-wave: "0"
+
+spec:
+  project: default
+  source:
+    # Tells Argo CD where to go on the internet 
+    # to fetch the installation files for the core OPA Gatekeeper application
+    repoURL: https://github.com/feniksxshi/k8s-rbac-admission-policy
+    chart: gatekeeper
+    targetRevision: 3.14.0
+  destination: 
+    server: https://kubernetes.default.svc
+    namespace: gatekeeper-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+  syncOptions:
+      - CreateNamespace=true # Tells Argo CD to build the 'gatekeeper-system' namespace first

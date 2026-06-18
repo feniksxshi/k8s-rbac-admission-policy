@@ -1,0 +1,13 @@
+apiVersion: contraints.gatekeeper.sh/v1beta1
+kind: ContraintTemplate
+metadata:
+  name: k8spspallowedusers
+spec:
+  enforcementAction: warn
+  match:
+    kinds: 
+    - apiGroups: [""]
+      kinds: ["Deployment"]
+  parameters:
+    runAsUser:
+      rule: "MustRunAsNonRoot"

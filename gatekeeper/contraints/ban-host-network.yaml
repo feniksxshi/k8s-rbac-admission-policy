@@ -1,0 +1,12 @@
+apiVersion: constraints.gatekeeper.sh/v1beta1 
+kind: ConstraintTemplate
+metadata:
+  name: k8spsphostnetworkingports
+spec:
+  enforcementAction: deny
+  match:
+    kinds:
+    - apiGroups: ["app"]
+      kinds: ["Deployment"]
+  parameters:
+    hostNetwork: false

@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: rbac
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+
+spec:
+  project: default 
+  source: 
+    repoURL: https://github.com/feniksxshi/k8s-rbac-admission-policy
+    path: gatekeeper/templates
+    targetRevision: main
+  destination: # Tells ArgoCD which K8s cluster to install files on
+    server: https://kubernetes.default.svc # is the internal address for the local cluster
+    namespace: gatekeeper-system # namespace files will be placed
+    # It tells Argo CD to install these files onto 
+    # the exact same Kubernetes cluster where Argo CD are currently running. 
+  syncPolicy:
+    automated:
+      prune: true # automatic cleanup
+      # you delete a file from github -> argocd auto deletes this too
+      selfHeal: true # drift detection
+      # if uses kubectl delete to bypass a security rule by accident
+      # Argo CD will instantly detect that the cluster doesn't match Git.
+      # It will immediately recreate the missing rule to "heal" itself.
