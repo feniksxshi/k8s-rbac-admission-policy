@@ -1,13 +1,13 @@
-apiVersion: constraints.gatekeeper.sh/v1beta1
-kind: K8sDisallowedTags
+apiVersion: contraints.gatekeeper.sh/v1beta1
+kind: ConstraintTemplate
 metadata:
   name: k8sdisallowedtags
 spec:
   enforcementAction: warn
   match:
     kinds:
-    - apiGroups: ["argoproj.io"]
-      kinds: ["Rollout"]
+    - apiGroups: [""]
+      kinds: ["Pod"]
   parameters:
     tags:
       - "latest"

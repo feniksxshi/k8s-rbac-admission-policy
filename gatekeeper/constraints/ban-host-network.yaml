@@ -6,7 +6,7 @@ spec:
   enforcementAction: deny
   match:
     kinds:
-    - apiGroups: ["argoproj.io"]
-      kinds: ["Rollout"]
+    - apiGroups: [""]
+      kinds: ["Pod"]
   parameters:
     hostNetwork: false

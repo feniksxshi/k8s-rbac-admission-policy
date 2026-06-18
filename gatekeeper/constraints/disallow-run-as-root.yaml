@@ -6,8 +6,8 @@ spec:
   enforcementAction: warn
   match:
     kinds:
-    - apiGroups: ["argoproj.io"]
-      kinds: ["Rollout"]
+    - apiGroups: [""]
+      kinds: ["Pod"]
   parameters:
     runAsUser:
       rule: "MustRunAsNonRoot"
