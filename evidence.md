@@ -1,8 +1,12 @@
+# RBAC + Policy Enforcement for K8s Cluster
+## RBAC
 ![alt text](image.png)
+
 Test: 
 ![alt text](image-3.png)
 ![alt text](image-2.png)
----
+
+## Policy Enforcement
 ![alt text](image-4.png)
 ![alt text](image-6.png)
 
@@ -21,11 +25,67 @@ Reviewing the current `rollout.yaml`
 Test: \
 Use Kubernetes server-side dry-run. It triggers Gatekeeper admission without creating a real Pod. 
 1. Reject `:latest`
-```bash
-kubectl set image -f /tmp/test-pod.yaml \
-  test=busybox:latest --local -o yaml |
-kubectl apply --dry-run=server -f -
-```
+	```bash
+	kubectl set image -f /tmp/test-pod.yaml \
+	  test=busybox:latest --local -o yaml |
+	kubectl apply --dry-run=server -f -
+	```
+	![alt text](image-11.png)
+
+2. Reject missing resource limits
+	```bash
+	kubectl patch --local -f tmp/test-pod.yaml \
+	  --type=json \
+	  -p='[{"op":"remove","path":"/spec/containers/0/resources/limits"}]' \
+	  -o yaml |
+	kubectl apply --dry-run=server -f -
+	```
+	![alt text](image-12.png)
+
+3. Reject runAsUser: 0
+	```bash
+	kubectl patch --local -f tmp/test-pod.yaml \
+	  --type=json \
+	  -p='[
+	    {
+	      "op": "replace",
+	      "path": "/spec/containers/0/securityContext/runAsUser",
+	      "value": 0
+	    }
+	  ]' \
+	  -o yaml |
+	kubectl apply --dry-run=server -f -
+	```
+	![alt text](image-13.png)
+
+3. Reject host network
+	```bash
+	kubectl patch --local -f tmp/test-pod.yaml \
+	  --type=json \
+	  -p='[
+	    {
+	      "op": "add",
+	      "path": "/spec/hostNetwork",
+	      "value": true
+	    }
+	  ]' \
+	  -o yaml |
+	kubectl apply --dry-run=server -f -
+	```
+	![alt text](image-14.png)
+
+4. Valid Pod (version pinned + resource limits + non-root user)
+	```bash
+	kubectl apply --dry-run=server -f tmp/test-pod.yaml
+	```
+	![alt text](image-15.png)
+	Produce no Gatekeeper violations.
+	![alt text](image-16.png)
+
+## Custom ConstraintTemplate
+Docs: https://open-policy-agent.github.io/gatekeeper/website/docs/howto/
+
+
 --- 
 Latest commit on origin/main
 ```bash
