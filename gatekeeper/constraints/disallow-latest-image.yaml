@@ -1,5 +1,5 @@
 apiVersion: contraints.gatekeeper.sh/v1beta1
-kind: ConstraintTemplate
+kind: K8sDisallowedTags
 metadata:
   name: k8sdisallowedtags
 spec:
