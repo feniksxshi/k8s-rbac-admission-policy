@@ -9,7 +9,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/feniksxshi/rbac-gatekeep-k8s
+    repoURL: https://github.com/feniksxshi/k8s-rbac-admission-policy
     path: app-alert
     targetRevision: main
   destination:
