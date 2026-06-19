@@ -10,5 +10,6 @@ spec:
     - key:
         data: |
           -----BEGIN PUBLIC KEY-----
-          PASTE_PUBLIC_KEY_HERE
+          MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE81TlimNlkstglEym42w+j9J2mQ6N
+          ujTf3fXx9pBADCwyzY+OghhiZ44HZs6VuhWbSc1RlSuGOG9YnsScTbRbtQ==
           -----END PUBLIC KEY-----
