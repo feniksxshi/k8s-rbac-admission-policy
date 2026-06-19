@@ -102,6 +102,15 @@ Create AWS Crendentials in Minikube
 ![alt text](image-19.png)
 ![alt text](image-20.png)
 
+![alt text](image-21.png)
+
+## TC07–TC09: test rotate quan trọng nhất
+
+
+
+
+
+
 --- 
 Latest commit on origin/main
 ```bash
