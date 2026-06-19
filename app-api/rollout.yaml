@@ -48,6 +48,21 @@ spec:
           limits:
             cpu: 200m
             memory: 128Mi
+            
+        volumnMounts:
+          - name: db-password
+            mountPath: /etc/secrets
+            readOnly: true
+
+      volumes:
+      - name: db-password
+        secret:
+          secretName: my-k8s-db-secret
+          items:
+          - key: password
+            path: password
+
+
   strategy:
     canary:
       analysis:
