@@ -105,12 +105,39 @@ Create AWS Crendentials in Minikube
 ![alt text](image-21.png)
 
 ## TC07–TC09: test rotate quan trọng nhất
+Đổi value trong AWS Secrets Manager Console:
+![alt text](image-23.png)
 
+Sau khi đổi value mới: 
+![alt text](image-24.png)
+![alt text](image-25.png)
 
+Kiểm tra pod không restart: \
+Before
+![alt text](image-26.png)
+After
+![alt text](image-27.png)
+- Tên pods không đổi
+- RESTARTS = 0
+- POD vẫn running
 
+Kiểm tra file mount:
+![alt text](image-28.png)
+---
+Test
+![alt text](image-30.png)
+![alt text](image-32.png)
 
+Kiểm tra repo không lộ credentials
+![alt text](image-33.png)
 
-
+## Trivy + Cosign
+```
+build/push → Trivy scan → scan pass → Cosign sign
+```
+![alt text](image-34.png)
+- private key -> không commit
+- signing/cosign.pub  -> public - được commit
 --- 
 Latest commit on origin/main
 ```bash

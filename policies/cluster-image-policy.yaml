@@ -1,0 +1,14 @@
+# Creates signature policy
+apiVersion: policy.sigstore.dev/v1beta1
+kind: ClusterImagePolicy
+metadata:
+  name: require-signed-w10-api
+spec:
+  images:
+    - glob: "ghcr.io/feniksxshi/w10-api*"
+  authorities:
+    - key:
+        data: |
+          -----BEGIN PUBLIC KEY-----
+          PASTE_PUBLIC_KEY_HERE
+          -----END PUBLIC KEY-----
