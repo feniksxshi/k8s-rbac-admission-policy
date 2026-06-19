@@ -62,7 +62,6 @@ spec:
           - key: password
             path: password
 
-
   strategy:
     canary:
       analysis:
