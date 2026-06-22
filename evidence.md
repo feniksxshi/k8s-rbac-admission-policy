@@ -12,55 +12,32 @@ The expected authorization matrix is shown below.
 
 Authorization was validated with user impersonation through `kubectl auth can-i`:
 
-```bash
-kubectl auth can-i create deployments.apps -n demo --as=alice
-kubectl auth can-i create deployments.apps -n kube-system --as=alice
-kubectl auth can-i get pods -A --as=bob
-kubectl auth can-i delete nodes --as=carol
-```
+  ```bash
+  kubectl auth can-i create deployments.apps -n demo --as=alice
+  kubectl auth can-i create deployments.apps -n kube-system --as=alice
+  kubectl auth can-i get pods -A --as=bob
+  kubectl auth can-i delete nodes --as=carol
+  ```
 
 Observed results:
-
-- Alice can create deployments in `demo`.
-- Alice cannot create deployments in `kube-system`.
-- Bob can read pods across all namespaces.
-- Carol cannot delete cluster nodes.
-
-![Observed RBAC authorization results](assets/image-2.png)
+  ![Observed RBAC authorization results](assets/image-2.png)
 
 ## 2. OPA Gatekeeper admission controls
 
 ### 2.1 Policy scope
-
-The Gatekeeper configuration evaluates these workload properties:
-
-- Disallowed image tag: `latest`
-- Required CPU and memory limits
-- Non-root execution
-- Disabled host networking
-
-![Gatekeeper policy requirements](assets/image-4.png)
-
-![Installed Gatekeeper resources](assets/image-6.png)
+  ![Gatekeeper policy requirements](assets/image-4.png)
+  
+  ![Installed Gatekeeper resources](assets/image-6.png)
 
 ### 2.2 Application manifest review
-
-The application rollout was reviewed before admission testing:
-
 - `hostNetwork` is not configured and therefore defaults to `false`.
 - The container image uses a pinned version rather than `latest`.
 - CPU and memory limits are configured.
 - A container security context was added to require non-root execution.
-
-![Pinned application image](assets/image-7.png)
-
-![Application resource limits](assets/image-8.png)
-
-![Non-root application security context](assets/image-9.png)
-
-The relevant Gatekeeper constraints were also adjusted to target the required workload resources.
-
-![Gatekeeper constraint match configuration](assets/image-10.png)
+  
+  ![Pinned application image](assets/image-7.png)
+  ![Application resource limits](assets/image-8.png)
+  ![Non-root application security context](assets/image-9.png)
 
 ### 2.3 Admission test: disallowed `latest` tag
 
@@ -76,37 +53,35 @@ Result: Gatekeeper detected the `latest` tag and emitted a warning. The resource
 
 ### 2.4 Admission test: missing resource limits
 
-```bash
-kubectl patch --local -f tmp/test-pod.yaml \
-  --type=json \
-  -p='[{"op":"remove","path":"/spec/containers/0/resources/limits"}]' \
-  -o yaml |
-kubectl apply --dry-run=server -f -
-```
+  ```bash
+  kubectl patch --local -f tmp/test-pod.yaml \
+    --type=json \
+    -p='[{"op":"remove","path":"/spec/containers/0/resources/limits"}]' \
+    -o yaml |
+  kubectl apply --dry-run=server -f -
+  ```
 
 Result: Gatekeeper detected the missing CPU and memory limits and emitted a warning. The resource remained admissible because this constraint uses `enforcementAction: warn`.
-
-![Gatekeeper warning for missing resource limits](assets/image-12.png)
+  ![Gatekeeper warning for missing resource limits](assets/image-12.png)
 
 ### 2.5 Admission test: root execution
 
-```bash
-kubectl patch --local -f tmp/test-pod.yaml \
-  --type=json \
-  -p='[
-    {
-      "op": "replace",
-      "path": "/spec/containers/0/securityContext/runAsUser",
-      "value": 0
-    }
-  ]' \
-  -o yaml |
-kubectl apply --dry-run=server -f -
-```
+  ```bash
+  kubectl patch --local -f tmp/test-pod.yaml \
+    --type=json \
+    -p='[
+      {
+        "op": "replace",
+        "path": "/spec/containers/0/securityContext/runAsUser",
+        "value": 0
+      }
+    ]' \
+    -o yaml |
+  kubectl apply --dry-run=server -f -
+  ```
 
 Result: Gatekeeper detected `runAsUser: 0` and emitted a warning. The resource remained admissible because this constraint uses `enforcementAction: warn`.
-
-![Gatekeeper warning for root execution](assets/image-13.png)
+  ![Gatekeeper warning for root execution](assets/image-13.png)
 
 ### 2.6 Admission test: host networking
 
@@ -125,8 +100,7 @@ kubectl apply --dry-run=server -f -
 ```
 
 Result: Gatekeeper denied the request because `hostNetwork: true` violates the enforced policy.
-
-![Gatekeeper denial for host networking](assets/image-14.png)
+  ![Gatekeeper denial for host networking](assets/image-14.png)
 
 ### 2.7 Admission test: compliant pod
 
@@ -135,10 +109,7 @@ kubectl apply --dry-run=server -f tmp/test-pod.yaml
 ```
 
 The compliant pod uses a pinned image, defines resource limits, runs as a non-root user, and does not enable host networking. It was admitted without a Gatekeeper violation.
-
 ![Compliant pod server-side dry-run](assets/image-15.png)
-
-![No Gatekeeper violations for the compliant pod](assets/image-16.png)
 
 ## 3. Custom deployment naming policy
 
@@ -157,7 +128,6 @@ kubectl -n demo create deployment gatekeeper-test \
 ```
 
 Result: the deployment was denied because its name did not have an allowed prefix.
-
 ![Custom deployment naming policy denial](assets/image-17.png)
 
 ## 4. External Secrets Operator and AWS Secrets Manager
@@ -181,8 +151,8 @@ ESO subsequently synchronized the new value into Kubernetes
 ![Secret synchronization test](assets/image-30.png)
 ![Rotated mounted-secret value](assets/image-32.png)
 ![Application pods after secret rotation](assets/image-27.png)
+\
 The evidence confirms that:
-
 - Pod names did not change
 - The restart count remained zero
 - The pods remained in the `Running` state
@@ -216,9 +186,7 @@ The Sigstore admission webhook then denied the image during Kubernetes server-si
 A successful CI run produced and signed an image digest. Local Cosign verification confirmed that the claims and signature were valid against `signing/cosign.pub`.
 
 ![Successful CI image-signing run](assets/image-44.png)
-
 ![Signed CI image digest](assets/image-45.png)
-
 ![Cosign verification of the trusted signature](assets/image-46.png)
 
 For compatibility with the deployed policy-controller, the signature was also published using Cosign's legacy signature-tag layout.
